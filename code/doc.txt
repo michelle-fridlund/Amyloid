@@ -1,0 +1,21 @@
+PET RECON
+- 127x128x128
+- MNI registration
+- zero padded to 128x128x128
+- SUV convertion
+
+Lowdose simulated 50 MBq
+Highdose gt 350 and post injection time less than 60 min
+
+summary = {'train':pts[:60],'valid':pts[60:]}                                                                                                                                                      
+
+In [5]: import pickle                                                                                                                                                                                      
+
+In [6]: pickle.dump(summary,open('data_suv.pickle'.'wb'))                                                                                                                                                  
+  File "<ipython-input-6-8e5961a4c5ae>", line 1
+    pickle.dump(summary,open('data_suv.pickle'.'wb'))
+                                                  ^
+SyntaxError: invalid syntax
+
+
+In [7]: pickle.dump(summary,open('data_suv.pickle','wb'))     
