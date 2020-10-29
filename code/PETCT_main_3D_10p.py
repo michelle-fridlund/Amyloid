@@ -17,18 +17,18 @@ TF_CPP_MIN_LOG_LEVEL=2
 
 dims_inplane = 128
 stack_of_slices = 16
-
+train_or_test = "train"
 batch_size = -1
   
 # Added correct patient weight, and now yielding axial slices! (v3)
 def load_data_suv_ptweight(train_or_test,batch_size,orientation='axial'):
-
+    
       augment = True if train_or_test == "train" else False
       
       dat,res = data.load_stack_suv_ptweight_ctnorm_double(train_or_test,augment=augment,orientation=orientation)
       
-      X = dat.reshape(128,128,16,2)
-      y = res.reshape(128,128,16,1)
+      X = dat.reshape((128,128,16,1))
+      y = res.reshape((128,128,16,1))
     
       return X, y
 
@@ -38,11 +38,11 @@ def generator_train():
 def generator_validate():
     yield load_data_suv_ptweight('valid',batch_size,orientation='axial')
     
-def model_train(model_outname,x,y,z,d,data_folder='data',epochs=20,batch_size=1,lr=0.0001,verbose=1,train_pts=None,validate_pts=None,initial_epoch=0,initial_model=None,MULTIGPU=False,loss="mae"):
+def model_train(model_outname,x,y,z,d,data_folder='data_michelle',epochs=20,batch_size=1,lr=0.0001,verbose=1,train_pts=None,validate_pts=None,initial_epoch=0,initial_model=None,MULTIGPU=False,loss="mae"):
 
     # Generators
-    data_train_gen = tf.data.Dataset.from_generator(generator_train, output_types=(tf.float32,tf.float32), output_shapes=(tf.TensorShape((128, 128, 16, 2)),tf.TensorShape((128, 128, 16, 1))))
-    data_valid_gen = tf.data.Dataset.from_generator(generator_validate, output_types=(tf.float32,tf.float32), output_shapes=(tf.TensorShape((128, 128, 16, 2)),tf.TensorShape((128, 128, 16, 1))))
+    data_train_gen = tf.data.Dataset.from_generator(generator_train, output_types=(tf.float32,tf.float32), output_shapes=(tf.TensorShape((128, 128, 16, 1)),tf.TensorShape((128, 128, 16, 1))))
+    data_valid_gen = tf.data.Dataset.from_generator(generator_validate, output_types=(tf.float32,tf.float32), output_shapes=(tf.TensorShape((128, 128, 16, 1)),tf.TensorShape((128, 128, 16, 1))))
     
     # Use shuffle on dataset - not sure how/why it works and doesnt run out of memory
     data_valid_gen = data_valid_gen.repeat().batch(batch_size)
@@ -97,7 +97,7 @@ def do_train(LOG=None,MULTIGPU=False): #
         return
     
     # Initialize training
-    model_train(model_outname,128,128,16,2,epochs=epoch,batch_size=batch_size,lr=lr)
+    model_train(model_outname,128,128,16,1,epochs=epoch,batch_size=batch_size,lr=lr)
     
 if __name__=="__main__":
     do_train()

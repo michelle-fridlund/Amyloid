@@ -6,8 +6,8 @@ _dat_ctnorm_double_name = "dat_10_suv_ctnorm_128x128.npy"
 _res_suv_double_name = "res_50MBq_suv_128x128.npy"
 _dat_suv_ctnorm_double_name = "dat_50MBq_suv_ctnorm_128x128.npy"
 
-_res_suv_ptweight_double_name = "res_50MBq_suv_ptweight_128x128.npy"
-_dat_suv_ptweight_ctnorm_double_name = "dat_50MBq_suv_ptweight_ctnorm_128x128.npy"
+#_res_suv_ptweight_double_name = "res_50MBq_suv_ptweight_128x128.npy"
+#_dat_suv_ptweight_ctnorm_double_name = "dat_50MBq_suv_ptweight_ctnorm_128x128.npy"
 
 _res_suv_ptweight_double_name = "Lowdose_SUV_50MBq.npy"
 _dat_suv_ptweight_ctnorm_double_name ="Fulldose_SUV.npy"
@@ -22,12 +22,19 @@ def load_stack_suv_ptweight_ctnorm_double(mode,z=None, return_studyid=False, aug
 
     # --- Load data and labels 
     fname = '%s/%s/%s' % (root, stats,_dat_suv_ptweight_ctnorm_double_name)
-    dat = np.memmap(fname, dtype='double', mode='r')
-    dat = dat.reshape(128,128,128,2)
-
+    
+#    dat = np.memmap(fname, dtype='double', mode='r')
+#    dat = np.load(fname)
+#   dat = dat.expand_dims(-1)
+    dat = np.load(fname)
+    dat = dat.reshape(128,128,128,1)
+#    dat = dat[:,:,:, np.newaxis]
+   
+    
     fname = '%s/%s/%s' % (root, stats,_res_suv_ptweight_double_name)
-    res = np.memmap(fname, dtype='double', mode='r')
-    res = res.reshape(128,128,128)
+#    res = np.memmap(fname, dtype='double', mode='r')
+    res = np.load(fname)
+    res = res.reshape((128,128,128))
 
     # --- Determine slice
     if z == None:
@@ -77,11 +84,11 @@ def load_all_suv_ptweight_ctnorm_double(mode, ind=None):
     # --- Load data and labels 
     fname = '%s/%s/%s' % (root, stats,_dat_suv_ptweight_ctnorm_double_name)
     dat = np.memmap(fname, dtype='double', mode='r')
-    dat = dat.reshape(128,128,128,2)
+    dat = dat.reshape((128,128,128,2))
 
     fname = '%s/%s/%s' % (root, stats,_res_suv_ptweight_double_name)
     res = np.memmap(fname, dtype='double', mode='r')
-    res = res.reshape(128,128,128)
+    res = res.reshape((128,128,128))
     
     return dat, res, stats
 

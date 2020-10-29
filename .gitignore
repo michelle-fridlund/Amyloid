@@ -1,3 +1,5 @@
 .spyproject
-pycache/
+__pycache__/
 data_michelle
+/code/PETCTPiB_v1_suv_e100_bz4_lr0.0001.h5
+/code/checkpoint
